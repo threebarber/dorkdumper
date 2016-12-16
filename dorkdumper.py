@@ -2,12 +2,8 @@
 import requests
 import urllib
 from bs4 import BeautifulSoup
-import re
-import bleach
 import optparse
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 
 def scrapedorks(page,filename):
