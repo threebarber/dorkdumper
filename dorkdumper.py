@@ -9,7 +9,7 @@ import sys
 def scrapedorks(page,filename):
 
     print "[+]Scraping results from page: " +str(page)
-    print "[+]Saving to file: " +filename
+    print "[+]Saving to file: " +filename+ "\n"
 
     url = 'https://cxsecurity.com/dorks/' + str(page)
         
@@ -23,11 +23,12 @@ def scrapedorks(page,filename):
     
     dorksclean = clean
     
-    print dorksclean
+    #print dorksclean optional for testing/debugging purposes 
 
     writefile = open(filename,'w')
 
     writefile.write(str(dorksclean))
+    print "[+] Dorks grabbed/saved successfully!"
 
 def main():
    
@@ -52,8 +53,11 @@ def main():
     if (str(page)) == None != (filename == None):
         print parser.usage
         exit(0) #check to make sure required params were assigned a value - if not, exit
-    scrapedorks(page,filename)
-
+    try:
+        scrapedorks(page,filename)
+    except Exception, e:
+        print '[-]Error: ' +str(e)
+        exit(0)
 if __name__ == '__main__':
     main()
 
