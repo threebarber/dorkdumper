@@ -2,33 +2,39 @@
 import requests
 import urllib
 from bs4 import BeautifulSoup
+import re
+import bleach
 import optparse
 import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def scrapedorks(page,filename):
 
     print "[+]Scraping results from page: " +str(page)
-    print "[+]Saving to file: " +filename+ "\n"
+    print "[+]Saving to file: " +filename
 
     url = 'https://cxsecurity.com/dorks/' + str(page)
         
     r = urllib.urlopen(url).read()
     
-    soup = BeautifulSoup(r,'lxml')
+    soup = BeautifulSoup(r,'html.parser')
     
-    dorksraw = soup.find_all("font",{'color':'#FCFCFC'})    
+    dorksraw = soup.find_all("font",{'color':'#FCFCFC'})
                 
     clean = bleach.clean(dorksraw, tags=[], strip=True)
     
-    dorksclean = clean
+    #dorksclean = clean
+
+    dorksclean= clean.replace('\\xa0', ' ')
     
-    #print dorksclean optional for testing/debugging purposes 
+    print dorksclean
 
     writefile = open(filename,'w')
 
     writefile.write(str(dorksclean))
-    print "[+] Dorks grabbed/saved successfully!"
 
 def main():
    
@@ -50,14 +56,11 @@ def main():
     page = options.page
     filename = options.filename
 
-    if (str(page)) == None != (filename == None):
+    if (options.page) == None or (options.filename) == None:
         print parser.usage
         exit(0) #check to make sure required params were assigned a value - if not, exit
-    try:
-        scrapedorks(page,filename)
-    except Exception, e:
-        print '[-]Error: ' +str(e)
-        exit(0)
+    scrapedorks(page,filename)
+
 if __name__ == '__main__':
     main()
 
